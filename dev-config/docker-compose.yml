@@ -6,21 +6,17 @@ services:
       context: ../front
       dockerfile: ../dev-config/Dockerfile.front
     ports:
-      - published: 3000
-        target: 3000
-      # - "3000:3000"
+      - "3000:3000"
     volumes:
       - ../front:/usr/app
     networks:
-      - strapi: null
+      - strapi
   cms:
     build: 
       context: ../cms
       dockerfile: ../dev-config/Dockerfile.cms
     ports:
-      - published: 1337
-        target: 1337
-      # - "1337:1337"
+      - "1337:1337"
     volumes:
       - ../cms:/usr/app
     environment:
@@ -31,26 +27,25 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_HOST: cms
+      DATABASE_HOST: db
       DATABASE_CLIENT: postgres
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_PORT: 5432
+      NODE_ENV: ${NODE_ENV}
     networks:
-      - strapi: null
+      - strapi
   db: 
     image: postgres:15.4-alpine3.18
     restart: always
     ports:
-      - published: 5432
-        target: 5432
-      # - "5432:5432"
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_DB: cms${DATABASE_NAME}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - db:/var/lib/postgresql/data
     networks:
-      - strapi: null
+      - strapi
 networks:
   strapi:
 volumes:
