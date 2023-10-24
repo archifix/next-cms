@@ -7,6 +7,9 @@ services:
       dockerfile: ../dev-config/Dockerfile.front
     ports:
       - "3000:3000"
+    environment:
+      API_URL: ${API_URL}
+      API_TOKEN: ${API_TOKEN}
     volumes:
       - ../front:/usr/app
     networks:
